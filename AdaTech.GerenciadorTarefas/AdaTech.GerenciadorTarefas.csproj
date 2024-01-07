@@ -7,6 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties jsonparser_4db_1json__JsonSchema="https://api.airplane.dev/v0/schemas/task.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+  <ItemGroup>
+    <None Update="JsonParser\db.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

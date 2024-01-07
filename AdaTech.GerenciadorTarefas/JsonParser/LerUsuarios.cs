@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-
+﻿using System.Text.Json;
+using AdaTech.GerenciadorTarefas;
 internal class LerUsuarios<T> where T : class
 {
     public static List<T> ReceberJson()
     {
         string tipo = typeof(T).Name; // Receives the name of the class
-
-        // Absolute path to the JSON file
-        string absolutePath = @"C:\Users\luanar\Documents\AdaTech.GerenciadorTarefas\AdaTech.GerenciadorTarefas\JsonParser\db.json";
+        var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");
 
         try
         {
             // Read JSON from file
-            string jsonString = File.ReadAllText(absolutePath);
-
+            string jsonString = File.ReadAllText(path);
             // Deserialize JSON into a List<T>
-            List<T> itemList = JsonSerializer.Deserialize<List<T>>(jsonString);
+            JsonData<T> data = JsonSerializer.Deserialize<JsonData<T>>(jsonString);
 
             // Simple JSON print example
             Console.WriteLine($"JSON Data for {tipo}:");
-            foreach (var item in itemList)
+            foreach (var item in data.Values)
             {
                 Console.WriteLine(JsonSerializer.Serialize(item, new JsonSerializerOptions { WriteIndented = true }));
             }
 
-            return itemList;
+            return null;
         }
         catch (FileNotFoundException ex)
         {
