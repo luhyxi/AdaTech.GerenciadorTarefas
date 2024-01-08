@@ -13,7 +13,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         public string Nome { get; set; }
         private List<Tarefa> tarefasAtribuidas = new List<Tarefa>();
 
-        protected Usuario(int id, string nome, List<Tarefa> tarefasatribuidas )
+        protected Usuario(int id, string nome, List<Tarefa> tarefasatribuidas)
         {
             this.id = id;
             Nome = nome;
