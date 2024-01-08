@@ -1,9 +1,6 @@
 ﻿using AdaTech.GerenciadorTarefas.Tarefas;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdaTech.GerenciadorTarefas.Usuarios
 {
@@ -11,7 +8,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
     {
         private int id;
         public string Nome { get; set; }
-        private List<Tarefa> tarefasAtribuidas = new List<Tarefa>();
+        private List<Tarefa> tarefasAtribuidas;
 
         protected Usuario(int id, string nome, List<Tarefa> tarefasatribuidas)
         {
@@ -20,31 +17,31 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             tarefasAtribuidas = tarefasatribuidas;
         }
 
-        public virtual void CriarTarefa()
+        public virtual void CriarTarefa(int tarefaId, string tarefaName, string tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
         {
-            // Implementation for creating a task
+            Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaId, tarefaName, tarefaArea, tarefaestado, tarefaData);
+
+            tarefasAtribuidas.Add(novaTarefa);
+
+            Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuida a {Nome}.");
         }
 
         public virtual void VerTarefas(Usuario usuario)
         {
-            // Implementation for viewing tasks
         }
 
         public virtual void AssumirTarefa(Usuario usuario)
         {
-            // Implementation for taking ownership of a task
         }
 
         public void AdicionarTarefas(List<Tarefa> tarefas)
         {
-            // Add logic to handle adding tasks to the user's list
-            // For example: this.Tarefas.AddRange(tarefas);
             tarefasAtribuidas.AddRange(tarefas);
         }
 
         public void VerTarefasAtribuidas()
         {
-            Console.WriteLine($"Tasks assigned to {Nome}:");
+            Console.WriteLine($"Tarefas atribuidas a {Nome}:");
             foreach (var tarefa in tarefasAtribuidas)
             {
                 Console.WriteLine($"- {tarefa.TarefaName}");
@@ -52,5 +49,3 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         }
     }
 }
-
-

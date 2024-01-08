@@ -22,5 +22,9 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
             Tarefaestado = tarefaestado;
             TarefaData = tarefaData;
         }
+        public static Tarefa CriarTarefa(int tarefaId, string tarefaName, string tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
+        {
+            return new Tarefa(tarefaId, tarefaName, tarefaArea, tarefaestado, tarefaData);
+        }
     }
 }
