@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdaTech.GerenciadorTarefas.Tarefas.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,23 +9,24 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
 {
     public class Tarefa
     {
-        public int TarefaId { get; set; }
+        private static uint idCounter = 0;
+        public uint TarefaId { get; }
         public string TarefaName { get; set; }
-        public string TarefaArea { get; set; }
+        public TarefaArea TarefaArea { get; set; }
         public TarefaEstado Tarefaestado { get; set; }
-        public DateTime TarefaData{ get; set; }
+        public DateTime TarefaDataDeadline{ get; set; }
 
-        public Tarefa(int tarefaId, string tarefaName, string tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
+        public Tarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
         {
-            TarefaId = tarefaId;
+            TarefaId = idCounter++;
             TarefaName = tarefaName;
             TarefaArea = tarefaArea;
             Tarefaestado = tarefaestado;
-            TarefaData = tarefaData;
+            TarefaDataDeadline = tarefaData;
         }
-        public static Tarefa CriarTarefa(int tarefaId, string tarefaName, string tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
+        public static Tarefa CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
         {
-            return new Tarefa(tarefaId, tarefaName, tarefaArea, tarefaestado, tarefaData);
+            return new Tarefa(tarefaName, tarefaArea, tarefaestado, tarefaData);
         }
     }
 }
