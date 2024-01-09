@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
-using AdaTech.GerenciadorTarefas;
+using AdaTech.GerenciadorTarefas.JsonParser;
 internal class LerUsuarios<T> where T : class
 {
+
     public static List<T> ReceberJson()
     {
         string tipo = typeof(T).Name; 

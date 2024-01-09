@@ -1,4 +1,5 @@
 ﻿using AdaTech.GerenciadorTarefas.Tarefas;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -6,15 +7,19 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 {
     public abstract class Usuario
     {
-        private int id;
+        private static int idCounter = 1;
+        public int AutomaticId { get; }
         public string Nome { get; set; }
-        private List<Tarefa> tarefasAtribuidas;
+        private List<Tarefa>? tarefasAtribuidas;
+        public string jsonDTO; // To be filled by constructor
 
-        protected Usuario(int id, string nome, List<Tarefa> tarefasatribuidas)
+        protected Usuario(string nome, List<Tarefa>? tarefasatribuidas)
         {
-            this.id = id;
+            AutomaticId = idCounter++;
             Nome = nome;
             tarefasAtribuidas = tarefasatribuidas;
+            UsuarioDTO usuarioDTO = new(AutomaticId, Nome, tarefasAtribuidas);
+            jsonDTO = JsonConvert.SerializeObject(usuarioDTO);
         }
 
         public virtual void CriarTarefa(int tarefaId, string tarefaName, string tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
