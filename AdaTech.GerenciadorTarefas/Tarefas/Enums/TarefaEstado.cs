@@ -8,10 +8,10 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
 {
     public enum TarefaEstado
     {
+        NãoIniciada = 0,
         Desenvolvimento = 0,
         Concluida = 1,
         Abandonada = 2,
-        Impedimento = 3,
-        Analise = 4,
+        Analise = 3,
     }
 }
