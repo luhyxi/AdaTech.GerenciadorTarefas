@@ -15,5 +15,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         public List<Tarefa>? Tarefas { get; set; }
 
         public UsuarioDTO ConvertJsonDTOToObject() => JsonConvert.DeserializeObject<UsuarioDTO>(jsonDTO);
+
+        
     }
 }
