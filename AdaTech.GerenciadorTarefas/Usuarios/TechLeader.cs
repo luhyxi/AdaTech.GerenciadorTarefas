@@ -10,14 +10,13 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 {
     public class TechLeader : Usuario
     {
+        public readonly string path = Usuario.path;
         public TechLeader(string nome, List<Tarefa>? tarefas) : base(nome, tarefas)
         {
         }
 
         public void AdicionarDev(UsuarioDTO usuarioDTO)
         {
-            var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");
-
             // Leitura do Json
             string existingJson = File.ReadAllText(path);
 
@@ -31,20 +30,22 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             catch (JsonSerializationException)
             {
                 // Handle the case where existing content is not a valid JSON array
-                Console.WriteLine("Existing JSON content is not a valid array. Initializing an empty list.");
+                Console.WriteLine("Nenhum desenvolvedor encontrado, criando um novo grupo de desenvolvedores.");
             }
 
             // Add the new UsuarioDTO
             usuarioList.Add(usuarioDTO);
 
+
             // Serialize the updated list and write it back to the file
             string updatedJson = JsonConvert.SerializeObject(usuarioList, Formatting.Indented);
             File.WriteAllText(path, updatedJson);
+            Console.WriteLine($"Novo desenvolvedor '{usuarioDTO.Nome}' registrado com sucesso!");
+
         }
 
         public override void VerTarefas(Usuario usuario)
         {
-
 
         }
         public override void AssumirTarefa(Usuario usuario)
