@@ -1,4 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using AdaTech.GerenciadorTarefas.Tarefas;
+using AdaTech.GerenciadorTarefas.Tarefas.Enums;
 using AdaTech.GerenciadorTarefas.Usuarios;
 
 TechLeader techie = new TechLeader("fredie", null);
@@ -7,6 +9,7 @@ Desenvolvedor basic = new Desenvolvedor("basic", null);
 techie.AdicionarDev(lana.ConvertJsonDTOToObject());
 techie.AdicionarDev(basic.ConvertJsonDTOToObject());
 
+lana.CriarTarefa("Daora", TarefaArea.Frontend,TarefaEstado.NãoIniciada, DateTime.Now);
 
 
 string dbJsonContent = ReadDbJson();
@@ -17,8 +20,7 @@ Console.WriteLine(dbJsonContent);
 
 static string ReadDbJson()
 {
-    // Read the contents of db.json using appropriate file reading logic
-    var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json"); ; // Replace with the actual path
+    var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");
     string dbJsonContent = File.ReadAllText(path);
     return dbJsonContent;
 }
