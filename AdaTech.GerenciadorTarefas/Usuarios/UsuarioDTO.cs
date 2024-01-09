@@ -9,11 +9,11 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 {
     public class UsuarioDTO
     {
-        public int AutomaticId { get; set; }
+        public uint AutomaticId { get; set; }
         public string Nome { get; set; }
         public List<Tarefa>? TarefasAtribuidas { get; set; }
 
-        public UsuarioDTO(int automaticId, string nome, List<Tarefa>? tarefasAtribuidas)
+        public UsuarioDTO(uint automaticId, string nome, List<Tarefa>? tarefasAtribuidas)
         {
             AutomaticId = automaticId;
             Nome = nome;

@@ -7,8 +7,8 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 {
     public abstract class Usuario
     {
-        private static int idCounter = 1;
-        public int AutomaticId { get; }
+        private static uint idCounter = 0;
+        public uint AutomaticId { get; }
         public string Nome { get; set; }
         private List<Tarefa>? tarefasAtribuidas;
         public string jsonDTO; // To be filled by constructor

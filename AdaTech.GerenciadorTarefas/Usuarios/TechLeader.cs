@@ -18,14 +18,30 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         {
             var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");
 
+            // Leitura do Json
             string existingJson = File.ReadAllText(path);
-            List<UsuarioDTO> usuarioList = JsonConvert.DeserializeObject<List<UsuarioDTO>>(existingJson) ?? new List<UsuarioDTO>();
 
+            // Initialize the list with the existing content or create a new list if it's null or not an array
+            List<UsuarioDTO> usuarioList = new List<UsuarioDTO>();
+
+            try
+            {
+                usuarioList = JsonConvert.DeserializeObject<List<UsuarioDTO>>(existingJson) ?? new List<UsuarioDTO>();
+            }
+            catch (JsonSerializationException)
+            {
+                // Handle the case where existing content is not a valid JSON array
+                Console.WriteLine("Existing JSON content is not a valid array. Initializing an empty list.");
+            }
+
+            // Add the new UsuarioDTO
             usuarioList.Add(usuarioDTO);
 
+            // Serialize the updated list and write it back to the file
             string updatedJson = JsonConvert.SerializeObject(usuarioList, Formatting.Indented);
             File.WriteAllText(path, updatedJson);
         }
+
         public override void VerTarefas(Usuario usuario)
         {
 
