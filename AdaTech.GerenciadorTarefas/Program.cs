@@ -12,10 +12,10 @@ techie.AdicionarDev(basic.ConvertJsonDTOToObject());
 
 
 // Inicialização de Tarefas
-lana.CriarTarefa("Daora", TarefaArea.Frontend,TarefaEstado.NãoIniciada, DateTime.Now);
-lana.CriarTarefa("Banuina", TarefaArea.Frontend, TarefaEstado.NãoIniciada, DateTime.Now);
-lana.CriarTarefa("Papapapa", TarefaArea.Frontend, TarefaEstado.NãoIniciada, DateTime.Now);
-lana.CriarTarefa("Banzinga", TarefaArea.Backend, TarefaEstado.NãoIniciada, DateTime.Now);
+lana.CriarTarefa("Daora", TarefaArea.Frontend,TarefaEstado.NãoIniciada);
+lana.CriarTarefa("Banuina", TarefaArea.Frontend, TarefaEstado.NãoIniciada);
+lana.CriarTarefa("Papapapa", TarefaArea.Frontend, TarefaEstado.NãoIniciada);
+lana.CriarTarefa("Banzinga", TarefaArea.Backend, TarefaEstado.NãoIniciada);
 
 
 // Inicialização estatisticas
@@ -28,9 +28,14 @@ string dbJsonContent = ReadDbJson();
 Console.WriteLine("Contents of db.json:");
 Console.WriteLine(dbJsonContent);
 
-estatisticasBack.MostrarTarefasArea();
 estatisticasFront.MostrarTarefasArea();
-EstatisticasTarefas.MostrarTarefasTodas();
+
+
+// Exemplo de como colocar Deadlines nas tarefas
+techie.ColocarDeadline(EstatisticasTarefas.TarefasStaticEstatisticas
+.FirstOrDefault(x => x.TarefaId == 1), DateTime.Now);
+
+estatisticasFront.MostrarTarefasArea();
 static string ReadDbJson()
 {
     var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");

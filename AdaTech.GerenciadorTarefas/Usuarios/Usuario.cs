@@ -13,7 +13,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         private static uint idCounter = 0;
         public uint UsuarioId { get; }
         public string Nome { get; set; }
-        private List<Tarefa>? tarefasAtribuidas;
+        public List<Tarefa>? tarefasAtribuidas;
         public string jsonDTO; // Preenchida durante o constructor
         protected Usuario(string nome, List<Tarefa>? tarefasatribuidas)
         {
@@ -25,9 +25,9 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         }
 
 
-        public virtual void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime tarefaData)
+        public virtual void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado)
         {
-            Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaName, tarefaArea, tarefaEstado, tarefaData);
+            Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaName, tarefaArea, tarefaEstado);
             tarefasAtribuidas.Add(novaTarefa);
 
             AtualizarJsonDTO();
@@ -35,7 +35,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
         }
 
-        private void AtualizarJsonDTO()
+        public void AtualizarJsonDTO()
         {
             UsuarioDTO usuarioDTO = new(UsuarioId, Nome, tarefasAtribuidas);
 
