@@ -1,33 +1,55 @@
-﻿using AdaTech.GerenciadorTarefas.Usuarios;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Collections.Generic;
+﻿using AdaTech.GerenciadorTarefas.Tarefas.Enums;
+using System.Collections;
 
 namespace AdaTech.GerenciadorTarefas.Tarefas
 {
     public class EstatisticasTarefas
     {
-        private List<Tarefa> tarefasLista = new List<Tarefa>();
-        public Usuario? Responsavel
+        public List<Tarefa> TarefasInstanciaEstatisticas = []; // Tarefas ligadas a tal instancia
+
+        public TarefaArea AreaDaEstatistica = new TarefaArea(); // Area da estatistica na instancia
+
+        public static List<Tarefa> TarefasStaticEstatisticas = []; // Todas as tarefas
+        public static List<TarefaArea> AreasTarefas { get; private set; } = []; // Todas as possiveis areas das estatísticas
+
+
+        public EstatisticasTarefas(TarefaArea AreaDaEstatistica)
         {
-            get => Responsavel;
-            set
+            this.AreaDaEstatistica = AreaDaEstatistica;
+
+            foreach (TarefaArea area in Enum.GetValues(typeof(TarefaArea)))
             {
-                Responsavel = value;
-                if (value != null)
+                AreasTarefas.Add(area);
+            }
+
+            foreach (var tarefa in TarefasStaticEstatisticas)
+            {
+                if (tarefa.TarefaArea == this.AreaDaEstatistica)
                 {
-                    value.AdicionarTarefas(this.tarefasLista);
+                    TarefasInstanciaEstatisticas.Add(tarefa);
                 }
             }
         }
 
-        public List<Tarefa> TarefasLista
+        public void AdicionarTarefa(Tarefa tarefa)
         {
-            get => tarefasLista;
+            TarefasStaticEstatisticas.Add(tarefa);
+        }
+        public static void MostrarTarefasTodas()
+        {
+            Console.WriteLine($"Todas as tarefas:\n");
+            foreach (var tarefa in TarefasStaticEstatisticas)
+            {
+                tarefa.PrintTarefa();
+            }
+        }
+        public void MostrarTarefasArea()
+        {
+            Console.WriteLine($"Tarefas da Area de {AreaDaEstatistica}:\n");
+            foreach (var tarefa in TarefasInstanciaEstatisticas)
+            {
+                tarefa.PrintTarefa();
+            }
         }
     }
 }

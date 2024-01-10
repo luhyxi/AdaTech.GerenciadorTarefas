@@ -13,20 +13,38 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
         public uint TarefaId { get; }
         public string TarefaName { get; set; }
         public TarefaArea TarefaArea { get; set; }
-        public TarefaEstado Tarefaestado { get; set; }
-        public DateTime TarefaDataDeadline{ get; set; }
+        public TarefaEstado TarefaEstado { get; set; }
+        public DateTime TarefaDataDeadline { get; set; }
 
-        public Tarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
+        public Tarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime tarefaData)
         {
             TarefaId = idCounter++;
             TarefaName = tarefaName;
             TarefaArea = tarefaArea;
-            Tarefaestado = tarefaestado;
+            TarefaEstado = tarefaEstado;
             TarefaDataDeadline = tarefaData;
+            AdicionarStaticEstatisticas(this);
         }
-        public static Tarefa CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaestado, DateTime tarefaData)
+
+        public static Tarefa CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime tarefaData)
         {
-            return new Tarefa(tarefaName, tarefaArea, tarefaestado, tarefaData);
+            return new Tarefa(tarefaName, tarefaArea, tarefaEstado, tarefaData);
+        }
+
+
+
+        // Adiciona a instancia da tarefa a lista de todas tarefas
+        public static void AdicionarStaticEstatisticas(Tarefa tarefa) => EstatisticasTarefas.TarefasStaticEstatisticas.Add(tarefa);
+        
+        // Printing da tarefa
+        public void PrintTarefa()
+        {
+            Console.WriteLine($"Tarefa ID: {TarefaId}");
+            Console.WriteLine($"Nome: {TarefaName}");
+            Console.WriteLine($"Área: {TarefaArea}");
+            Console.WriteLine($"Estado: {TarefaEstado}");
+            Console.WriteLine($"Data Deadline: {TarefaDataDeadline}");
+            Console.WriteLine();
         }
     }
 }
