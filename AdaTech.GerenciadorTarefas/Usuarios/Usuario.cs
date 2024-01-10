@@ -11,16 +11,16 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         protected static readonly string path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json"); // Path da db herdada por todas as filhas
 
         private static uint idCounter = 0;
-        public uint AutomaticId { get; }
+        public uint UsuarioId { get; }
         public string Nome { get; set; }
         private List<Tarefa>? tarefasAtribuidas;
         public string jsonDTO; // Preenchida durante o constructor
         protected Usuario(string nome, List<Tarefa>? tarefasatribuidas)
         {
-            AutomaticId = idCounter++;
+            UsuarioId = idCounter++;
             Nome = nome;
             tarefasAtribuidas = tarefasatribuidas ?? new List<Tarefa>(); 
-            UsuarioDTO usuarioDTO = new(AutomaticId, Nome, tarefasAtribuidas);
+            UsuarioDTO usuarioDTO = new(UsuarioId, Nome, tarefasAtribuidas);
             jsonDTO = JsonConvert.SerializeObject(usuarioDTO);
         }
 
@@ -35,15 +35,13 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
         }
 
-        // Add this method to Usuario class
         private void AtualizarJsonDTO()
         {
-            UsuarioDTO usuarioDTO = new(AutomaticId, Nome, tarefasAtribuidas);
+            UsuarioDTO usuarioDTO = new(UsuarioId, Nome, tarefasAtribuidas);
 
-            // Read existing JSON content
+
+            // Lista de usuarios para serem atualizadas
             string existingJson = File.ReadAllText(path);
-
-            // Initialize the list with the existing content or create a new list if it's null or not an array
             List<UsuarioDTO> usuarioList = new List<UsuarioDTO>();
 
             try
@@ -52,22 +50,17 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             }
             catch (JsonSerializationException)
             {
-                // Handle the case where existing content is not a valid JSON array
+               
                 Console.WriteLine("Nenhum desenvolvedor encontrado, criando um novo grupo de desenvolvedores.");
             }
 
-            // Add or update the UsuarioDTO in the list
-            int index = usuarioList.FindIndex(u => u.AutomaticId == AutomaticId);
-            if (index >= 0)
-            {
-                usuarioList[index] = usuarioDTO;
-            }
-            else
-            {
-                usuarioList.Add(usuarioDTO);
-            }
+            // Adicionar usurioDTO a lista de usuarios
+            int index = usuarioList.FindIndex(u => u.AutomaticId == UsuarioId);
+            
+            if (index >= 0)  usuarioList[index] = usuarioDTO;
+            else usuarioList.Add(usuarioDTO);
 
-            // Serialize the updated list and write it back to the file
+            // Serializar e atualizar JSON
             string updatedJson = JsonConvert.SerializeObject(usuarioList, Formatting.Indented);
             File.WriteAllText(path, updatedJson);
         }
