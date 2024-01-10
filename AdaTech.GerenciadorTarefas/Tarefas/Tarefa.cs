@@ -1,9 +1,4 @@
 ﻿using AdaTech.GerenciadorTarefas.Tarefas.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdaTech.GerenciadorTarefas.Tarefas
 {
@@ -14,28 +9,47 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
         public string TarefaName { get; set; }
         public TarefaArea TarefaArea { get; set; }
         public TarefaEstado TarefaEstado { get; set; }
-        public DateTime TarefaDataDeadline { get; set; }
+        public bool TemDeadline { get; set; } // Seta se a tarefa tem ou não tem deadline setada pelo Tech Lead
+        public DateTime? tarefaDataDeadline; // Deadline do projeto
 
-        public Tarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime tarefaData)
+        public DateTime? TarefaDataDeadline
+        {
+            get
+            {
+                return TemDeadline ? null : tarefaDataDeadline;
+            }
+            set
+            {
+                if (TemDeadline)
+                {
+                    // If TemDeadline is true, set TarefaDataDeadline to null
+                    tarefaDataDeadline = null;
+                }
+                else
+                {
+                    // Otherwise, set TarefaDataDeadline to the provided value
+                    tarefaDataDeadline = value;
+                }
+            }
+        }
+
+        public Tarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado)
         {
             TarefaId = idCounter++;
             TarefaName = tarefaName;
             TarefaArea = tarefaArea;
             TarefaEstado = tarefaEstado;
-            TarefaDataDeadline = tarefaData;
             AdicionarStaticEstatisticas(this);
         }
 
-        public static Tarefa CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime tarefaData)
-        {
-            return new Tarefa(tarefaName, tarefaArea, tarefaEstado, tarefaData);
-        }
 
+        
 
+        public static Tarefa CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado) => new Tarefa(tarefaName, tarefaArea, tarefaEstado);
 
         // Adiciona a instancia da tarefa a lista de todas tarefas
         public static void AdicionarStaticEstatisticas(Tarefa tarefa) => EstatisticasTarefas.TarefasStaticEstatisticas.Add(tarefa);
-        
+
         // Printing da tarefa
         public void PrintTarefa()
         {
@@ -43,7 +57,7 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
             Console.WriteLine($"Nome: {TarefaName}");
             Console.WriteLine($"Área: {TarefaArea}");
             Console.WriteLine($"Estado: {TarefaEstado}");
-            Console.WriteLine($"Data Deadline: {TarefaDataDeadline}");
+            Console.WriteLine(TarefaDataDeadline != null ? $"Data Deadline: {TarefaDataDeadline}" : "Sem DeadLine");
             Console.WriteLine();
         }
     }

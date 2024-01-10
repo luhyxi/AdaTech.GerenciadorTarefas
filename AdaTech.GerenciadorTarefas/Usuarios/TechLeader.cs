@@ -1,4 +1,5 @@
 ﻿using AdaTech.GerenciadorTarefas.Tarefas;
+using AdaTech.GerenciadorTarefas.Tarefas.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,20 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 
         }
 
+        // Somente TechLead: Coloca Deadline em Tarefa
+        public DateTime ColocarDeadline(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
+
+
+        public void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime deadLine, Usuario usuarioAtribuido)
+        {
+            Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaName, tarefaArea, tarefaEstado);
+            ColocarDeadline(novaTarefa, deadLine);
+            usuarioAtribuido.tarefasAtribuidas.Add(novaTarefa);
+
+            AtualizarJsonDTO();
+
+            Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
+        }
         public override void VerTarefas(Usuario usuario)
         {
 
@@ -52,13 +67,17 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         {
 
         }
-        public void MudarEstadoDeTarefa(Tarefa tarefa)
-        {
+        public void MudarEstadoDeTarefa(Tarefa tarefa, TarefaEstado tarefaEstado) =>  tarefa.TarefaEstado = tarefaEstado;
 
-        }
-        public void MudarResponsaveDeTarefa(Tarefa tarefa)
-        {
 
+        private void MudarResponsaveDeTarefa(Tarefa tarefa, Usuario antigoResposavel, Usuario novoResposavel)
+        {
+            if (antigoResposavel.tarefasAtribuidas.Contains(tarefa))
+            {
+                novoResposavel.tarefasAtribuidas.Add(tarefa);
+                antigoResposavel.tarefasAtribuidas.Remove(tarefa);
+            }
+            else Console.WriteLine($"O desenvolvedor {antigoResposavel.Nome} não possui essa tarefa em sua responsabilidade");
         }
     }
 }
