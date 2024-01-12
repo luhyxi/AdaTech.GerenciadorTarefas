@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AdaTech.GerenciadorTarefas.Usuarios
 {
-    public class TechLeader : Usuario
+    public class TechLeader : Usuario, IUsuario
     {
         public readonly string path = Usuario.path;
         public TechLeader(string nome, List<Tarefa>? tarefas) : base(nome, tarefas)
@@ -21,7 +21,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             // Leitura do Json
             string existingJson = File.ReadAllText(path);
 
-            // Initialize the list with the existing content or create a new list if it's null or not an array
+            // Inicializar uma lista para adicionar o Desenvolvedor caso não exista nenhum Dev
             List<UsuarioDTO> usuarioList = new List<UsuarioDTO>();
 
             try
@@ -30,15 +30,15 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             }
             catch (JsonSerializationException)
             {
-                // Handle the case where existing content is not a valid JSON array
+                // Caso seja nessario criar um novo grupo de Desenvolvedores (e.g Inserindo o primeiro dev ou após remover todos)
                 Console.WriteLine("Nenhum desenvolvedor encontrado, criando um novo grupo de desenvolvedores.");
             }
 
-            // Add the new UsuarioDTO
+            // Adiciona o usuario DTO
             usuarioList.Add(usuarioDTO);
 
 
-            // Serialize the updated list and write it back to the file
+            // Serializa e atualiza o Json
             string updatedJson = JsonConvert.SerializeObject(usuarioList, Formatting.Indented);
             File.WriteAllText(path, updatedJson);
             Console.WriteLine($"Novo desenvolvedor '{usuarioDTO.Nome}' registrado com sucesso!");
@@ -46,8 +46,17 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         }
 
         // Somente TechLead: Coloca Deadline em Tarefa
-        public DateTime ColocarDeadline(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
+        public void ColocarDeadline(Tarefa tarefa, DateTime novaDeadline)
+        {
+            MudarDeadLine(tarefa, novaDeadline);
+            AtualizarJsonDTO();
+        }
 
+        private DateTime MudarDeadLine(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
+
+        // Totalmente funcional
+        public Tarefa PesquisarTarefaId(int y) => EstatisticasTarefas.TarefasStaticEstatisticas
+        .FirstOrDefault(x => x.TarefaId == y);
 
         public void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime deadLine, Usuario usuarioAtribuido)
         {
@@ -59,18 +68,15 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
 
             Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
         }
-        public override void VerTarefas(Usuario usuario)
+
+
+        private void MudarEstadoDeTarefa(Tarefa tarefa, TarefaEstado tarefaEstado)
         {
-
+            tarefa.TarefaEstado = tarefaEstado;
+            AtualizarJsonDTO();
         }
-        public override void AssumirTarefa(Usuario usuario)
-        {
 
-        }
-        public void MudarEstadoDeTarefa(Tarefa tarefa, TarefaEstado tarefaEstado) =>  tarefa.TarefaEstado = tarefaEstado;
-
-
-        private void MudarResponsaveDeTarefa(Tarefa tarefa, Usuario antigoResposavel, Usuario novoResposavel)
+        private void MudarResponsavelDeTarefa(Tarefa tarefa, Usuario antigoResposavel, Usuario novoResposavel)
         {
             if (antigoResposavel.tarefasAtribuidas.Contains(tarefa))
             {
@@ -78,6 +84,17 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
                 antigoResposavel.tarefasAtribuidas.Remove(tarefa);
             }
             else Console.WriteLine($"O desenvolvedor {antigoResposavel.Nome} não possui essa tarefa em sua responsabilidade");
+            AtualizarJsonDTO();
+        }
+        public void AssumirTarefa(Tarefa tarefa, Usuario usuario)
+        {
+            if (usuario.tarefasAtribuidas.Contains(tarefa))
+            {
+                tarefasAtribuidas.Add(tarefa);
+                usuario.tarefasAtribuidas.Remove(tarefa);
+            }
+            else Console.WriteLine($"O TechLead {Nome} não possui essa tarefa em sua responsabilidade");
+            AtualizarJsonDTO();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace AdaTech.GerenciadorTarefas.Usuarios
 {
-    public abstract class Usuario
+    public abstract class Usuario : IUsuario
     {
         protected static readonly string path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json"); // Path da db herdada por todas as filhas
 
@@ -19,21 +19,12 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         {
             UsuarioId = idCounter++;
             Nome = nome;
-            tarefasAtribuidas = tarefasatribuidas ?? new List<Tarefa>(); 
+            tarefasAtribuidas = tarefasatribuidas ?? new List<Tarefa>();
             UsuarioDTO usuarioDTO = new(UsuarioId, Nome, tarefasAtribuidas);
             jsonDTO = JsonConvert.SerializeObject(usuarioDTO);
         }
 
 
-        public virtual void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado)
-        {
-            Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaName, tarefaArea, tarefaEstado);
-            tarefasAtribuidas.Add(novaTarefa);
-
-            AtualizarJsonDTO();
-
-            Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
-        }
 
         public void AtualizarJsonDTO()
         {
@@ -50,35 +41,23 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             }
             catch (JsonSerializationException)
             {
-               
+
                 Console.WriteLine("Nenhum desenvolvedor encontrado, criando um novo grupo de desenvolvedores.");
             }
 
             // Adicionar usurioDTO a lista de usuarios
             int index = usuarioList.FindIndex(u => u.AutomaticId == UsuarioId);
-            
-            if (index >= 0)  usuarioList[index] = usuarioDTO;
+
+            if (index >= 0) usuarioList[index] = usuarioDTO;
             else usuarioList.Add(usuarioDTO);
 
             // Serializar e atualizar JSON
             string updatedJson = JsonConvert.SerializeObject(usuarioList, Formatting.Indented);
             File.WriteAllText(path, updatedJson);
         }
+        protected void VerTarefas(Usuario usuario) => EstatisticasTarefas.MostrarTarefasTodas();
 
-
-
-        public virtual void VerTarefas(Usuario usuario)
-        {
-        }
-
-        public virtual void AssumirTarefa(Usuario usuario)
-        {
-        }
-
-        public void AdicionarTarefas(List<Tarefa> tarefas)
-        {
-            tarefasAtribuidas.AddRange(tarefas);
-        }
+        public void AdicionarTarefas(List<Tarefa> tarefas) => tarefasAtribuidas.AddRange(tarefas);
 
         public void VerTarefasAtribuidas()
         {
@@ -88,5 +67,10 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
                 Console.WriteLine($"- {tarefa.TarefaName}");
             }
         }
+
+
+        // Não usadas
+        void IUsuario.CriarTarefa() { }
+        void IUsuario.AssumirTarefa() { }
     }
 }
