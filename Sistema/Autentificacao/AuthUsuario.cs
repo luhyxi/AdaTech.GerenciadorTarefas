@@ -9,10 +9,10 @@ namespace Sistema.Autentificacao
 {
     public abstract class AuthUsuario : IAuth
     {
-        private string username;
-        private string password;
+        protected string? username = null;
+        protected string? password = null;
 
-        private static readonly Dictionary<string, string> CredenciaisLogin = new Dictionary<string, string>();
+        protected readonly Dictionary<string, string> CredenciaisLogin = new Dictionary<string, string>();
 
         public bool IsAuthenticated { get; set; }
 
