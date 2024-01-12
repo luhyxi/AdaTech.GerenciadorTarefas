@@ -67,6 +67,26 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
                 Console.WriteLine($"- {tarefa.TarefaName}");
             }
         }
+        public void ImprimirInformacoesUsuario()
+        {
+            Console.WriteLine($"ID do Usuário: {UsuarioId}");
+            Console.WriteLine($"Nome: {Nome}");
+
+            if (tarefasAtribuidas != null && tarefasAtribuidas.Any())
+            {
+                Console.WriteLine("Tarefas Atribuídas:");
+                foreach (var tarefa in tarefasAtribuidas)
+                {
+                    Console.WriteLine($"- {tarefa.TarefaName}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma tarefa atribuída.");
+            }
+
+            Console.WriteLine($"JSON DTO:\n{jsonDTO}");
+        }
 
 
         // Não usadas
