@@ -28,14 +28,12 @@ string dbJsonContent = ReadDbJson();
 Console.WriteLine("Contents of db.json:");
 Console.WriteLine(dbJsonContent);
 
-estatisticasFront.MostrarTarefasArea();
 
 
 // Exemplo de como colocar Deadlines nas tarefas
 techie.ColocarDeadline(EstatisticasTarefas.TarefasStaticEstatisticas
 .FirstOrDefault(x => x.TarefaId == 1), DateTime.Now);
 
-estatisticasFront.MostrarTarefasArea();
 static string ReadDbJson()
 {
     var path = Path.Join(Environment.CurrentDirectory, "JsonParser", "db.json");
