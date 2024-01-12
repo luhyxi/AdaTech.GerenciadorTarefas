@@ -25,7 +25,6 @@ namespace Sistema.Autentificacao
             }
             return false;
         }
-
         public bool Login(string username, string password)
         {
             if (Authenticate(username, password))
