@@ -12,10 +12,11 @@ using AdaTech.GerenciadorTarefas.Tarefas;
 
 namespace Sistema.Autentificacao
 {
-    internal class AuthTechLead : AuthUsuario, IAuth // Serve mais para as funcionalidades dentro do console
+    public class AuthTechLead : AuthUsuario, IAuth // Serve mais para as funcionalidades dentro do console
     {
-        private TechLeader? techLeadAtual = null;
 
+        public TechLeader? techLeadAtual = null;
+        
         public AuthTechLead()
         {
             GenerateLogin();
@@ -33,7 +34,15 @@ namespace Sistema.Autentificacao
                 do { SetPassword(Console.ReadLine()); } while (string.IsNullOrEmpty(password));
 
                 Console.WriteLine("Credenciais criadas, registrando TechLead");
+                
+                for (int i = 0; i < 15; i++) // Efeitozinho
+                {
+                    Console.Write(".");
+                    System.Threading.Thread.Sleep(100);
+                } Console.Clear();
+
                 techLeadAtual = new TechLeader(username, null);
+                IsAuthenticated = true;
             }
             else
             {

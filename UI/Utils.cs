@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace UI
+namespace Sistema.UI
 {
     public abstract class GeneralUtils
     {

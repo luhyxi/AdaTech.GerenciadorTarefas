@@ -49,25 +49,36 @@ namespace Sistema.Autentificacao
 
         public void SetUsername(string newUsername)
         {
-            if (Regex.IsMatch(newUsername, "^(?=.*[A-Z])(?=.*[0-9]).{8,}$"))
+            while (true)
             {
-                username = newUsername;
+                if (Regex.IsMatch(newUsername, "^(?=.*[A-Z])(?=.*[0-9]).{8,}$"))
+                {
+                    username = newUsername;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Formato inválido.");
+                    newUsername = Console.ReadLine();
+                }
             }
-            else
-            {
-                throw new ArgumentException("Invalid username format");
-            }
+            Console.Clear();
         }
 
         public void SetPassword(string newPassword)
         {
-            if (Regex.IsMatch(newPassword, "^(?=.*[A-Z])(?=.*[0-9]).{8,}$"))
+            while (true)
             {
-                password = newPassword;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid password format");
+                if (Regex.IsMatch(newPassword, "^(?=.*[A-Z])(?=.*[0-9]).{8,}$"))
+                {
+                    password = newPassword;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Formato inválido.");
+                    newPassword = Console.ReadLine();
+                }
             }
         }
 

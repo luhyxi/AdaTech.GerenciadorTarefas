@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AdaTech.GerenciadorTarefas\Entidades.csproj" />
+    <ProjectReference Include="..\Sistema\Sistema.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -13,21 +13,47 @@ namespace Sistema.Options
     {
 
         private readonly TechLeader techLeader;
-        
+
+
+
         // Funções da classe TechLead
         public TechLeaderController(TechLeader techLeader) => this.techLeader = techLeader ?? throw new ArgumentNullException(nameof(techLeader));
 
-        public void AdicionarDev(UsuarioDTO usuarioDTO) => techLeader.AdicionarDev(usuarioDTO);
+        public void AdicionarDev()
+        {
+            Console.WriteLine("Insira o nome do desenvolvedor");
+            string nome = Console.ReadLine();
 
-        public void ColocarDeadline(Tarefa tarefa, DateTime novaDeadline) => techLeader.ColocarDeadline(tarefa, novaDeadline);
+            if (string.IsNullOrWhiteSpace(nome))
+            {
+                Console.WriteLine("Por favor, insira um nome válido");
+                AdicionarDev(); // Recursively call AdicionarDev until a valid name is entered
+            }
+            else
+            {
+                Console.Clear();
+                var newDev = new Desenvolvedor(nome, null);
+                AdicionarDev(newDev.ConvertJsonDTOToObject());
+            }
+        }
+
+        public void ColocarDeadline()
+        {
+
+        }
+
+
+        internal void AdicionarDev(UsuarioDTO usuarioDTO) => techLeader.AdicionarDev(usuarioDTO);
+
+        private void ColocarDeadline(Tarefa tarefa, DateTime novaDeadline) => techLeader.ColocarDeadline(tarefa, novaDeadline);
 
         public Tarefa PesquisarTarefaId(int taskId) => techLeader.PesquisarTarefaId(taskId);
 
         public void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime deadLine, Usuario usuarioAtribuido) => techLeader.CriarTarefa(tarefaName, tarefaArea, tarefaEstado, deadLine, usuarioAtribuido);
 
         public void AssumirTarefa(Tarefa tarefa, Usuario usuario) => techLeader.AssumirTarefa(tarefa, usuario);
-        
-        
+
+
         // Funções da classe usuario
         public void AtualizarJsonDTO() => techLeader.AtualizarJsonDTO();
 
