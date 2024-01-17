@@ -34,9 +34,11 @@ int ReceiveOptions()
     Console.WriteLine("\n-------AÇÕES-------");
 
     Console.WriteLine($@"
-1 - Adicionar Desenvolvedor
+1 - Adicionar desenvolvedor
 2 - Colocar deadline em tarefa
-3 - Criar Tarefa");
+3 - Criar tarefa
+4 - Ver tarefas atribuidas
+5 - Imprimir info do usuario");
     return GeneralUtils.ReadOption(1, 10);
 }
 
@@ -54,7 +56,10 @@ void SelectOption(int select)
             techLeaderController.CriarTarefa();
             break;
         case 4:
-            techLeaderController.CriarTarefa();
+            techLeaderController.VerTarefasAtribuidas();
+            break;
+        case 5:
+            techLeaderController.ImprimirInformacoesUsuario();
             break;
         default:
             return;

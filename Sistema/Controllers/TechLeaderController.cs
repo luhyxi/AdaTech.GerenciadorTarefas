@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Sistema.Controllers
 {
@@ -45,7 +46,7 @@ namespace Sistema.Controllers
 
         public void ColocarDeadline()
         {
-            Console.Clear ();
+            Console.Clear();
             int tarefaID;
 
             Console.WriteLine("Insira o ID da tarefa selecionada");
@@ -96,79 +97,76 @@ namespace Sistema.Controllers
         public void CriarTarefa()
         {
             Console.Clear();
-            // Instanciando objetos na memoria
-            TarefaArea tarefaArea;
-            TarefaEstado tarefaEstado;
-            DateTime deadLine;
-            int idUsuario;
-
 
             if (!DesenvolvedorController.TemDesenvolvedor())
             {
-                Console.Clear();
-                Console.WriteLine("Nenhum desenvolvedor encontrado, por favor registre um antes de criar uma tarefa");
+                Console.WriteLine("Nenhum desenvolvedor encontrado. Registre um antes de criar uma tarefa.");
                 Console.ReadKey();
                 return;
             }
 
-            Console.WriteLine("Insira o nome da tarefa:");
+            Console.WriteLine("========== Criar Tarefa ==========");
+
+            // Task name
+            Console.Write("Nome da tarefa: ");
             string tarefaName = Console.ReadLine();
 
-            // Area da tarefa
+            // Task area
+            Console.WriteLine("Escolha a área da tarefa:");
+            Console.WriteLine("0 - Frontend");
+            Console.WriteLine("1 - Backend");
+            Console.WriteLine("2 - DevOps");
 
-            Console.WriteLine(
-$@"Escolha a área da tarefa:
-Frontend = 0,
-Backend = 1,
-Devops = 2,");
-            do
+            TarefaArea tarefaArea;
+            while (!Enum.TryParse(Console.ReadLine(), out tarefaArea))
             {
-                Console.WriteLine("A area escolhida não foi encontrada");
+                Console.WriteLine("Área inválida. Pressione qualquer tecla para continuar...");
                 Console.ReadKey();
-                Console.Clear();
-            } while (!Enum.TryParse<TarefaArea>(Console.ReadLine(), out tarefaArea));
+            }
 
-            // Estado da tarefa
+            // Task state
+            Console.WriteLine("Escolha o estado da tarefa:");
+            Console.WriteLine("0 - Não Iniciada");
+            Console.WriteLine("1 - Desenvolvimento");
+            Console.WriteLine("2 - Concluída");
+            Console.WriteLine("3 - Abandonada");
+            Console.WriteLine("4 - Análise");
 
-            Console.WriteLine(
-$@"Escolha a área da tarefa:
-NãoIniciada = 0,
-Desenvolvimento = 1,
-Concluida = 2,
-Abandonada = 3,
-Analise = 4,");
-
-            do
+            TarefaEstado tarefaEstado;
+            while (!Enum.TryParse(Console.ReadLine(), out tarefaEstado))
             {
-                Console.WriteLine("O estado escolhido não foi encontrado");
+                Console.WriteLine("Estado inválido. Pressione qualquer tecla para continuar...");
                 Console.ReadKey();
-                Console.Clear();
-            } while (!Enum.TryParse<TarefaEstado>(Console.ReadLine(), out tarefaEstado));
+            }
 
             // Deadline
-
-            Console.WriteLine("Insira a data limite (DD/MM/YYYY):");
-
-            while (!DateTime.TryParse(Console.ReadLine(), out deadLine))
+            Console.Write("Insira a data limite (DD/MM/YYYY): ");
+            DateTime deadLine;
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out deadLine))
             {
-                Console.WriteLine("Por favor, insira uma data válida:");
-                Console.ReadKey();
-                Console.Clear();
+                Console.WriteLine("Data inválida. Por favor, insira no formato correto (DD/MM/YYYY):");
             }
 
-            // Id de Usuario
-
-            Console.WriteLine("Insira o ID do usuário a ser atribuído:");
-
+            // User ID
+            Console.Write("Insira o ID do usuário a ser atribuído: ");
+            int idUsuario;
             while (!int.TryParse(Console.ReadLine(), out idUsuario))
             {
-                Console.WriteLine("Por favor, insira um ID válido:");
-                Console.ReadKey();
-                Console.Clear();
+                Console.WriteLine("ID inválido. Por favor, insira um ID válido:");
             }
+
+            
 
             Usuario usuarioAtribuido = PesquisarDevPorId(idUsuario);
 
+            if (usuarioAtribuido == null)
+            {
+                Console.WriteLine("Id não encontrado, por favor tente novamente");
+                Console.ReadKey();
+                return;
+            }
+
+            // Create task
             CriarTarefa(tarefaName, tarefaArea, tarefaEstado, deadLine, usuarioAtribuido);
         }
 
@@ -197,8 +195,20 @@ Analise = 4,");
 
         public void AdicionarTarefas(List<Tarefa> tarefas) => techLeader.AdicionarTarefas(tarefas);
 
-        public void VerTarefasAtribuidas() => techLeader.VerTarefasAtribuidas();
+        public void VerTarefasAtribuidas()
+        {
+            Console.Clear();
+            techLeader.VerTarefasAtribuidas();
+            Console.ReadKey();
+            Console.Clear();
+        }
 
-        public void ImprimirInformacoesUsuario() => techLeader.ImprimirInformacoesUsuario();
+        public void ImprimirInformacoesUsuario()
+        {
+            Console.Clear();
+            techLeader.ImprimirInformacoesUsuario();
+            Console.ReadKey();
+            Console.Clear();
+        }
     }
 }
