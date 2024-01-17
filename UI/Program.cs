@@ -2,7 +2,7 @@
 using Sistema.Autentificacao;
 using System.Data;
 using Sistema.UI;
-using Sistema.Options;
+using Sistema.Controllers;
 
 var authAtual = new AuthTechLead(); // Autentificação
 var usuarioAtual = authAtual.techLeadAtual; // Usuario/Techlead
@@ -12,6 +12,7 @@ var techLeaderController = new TechLeaderController(usuarioAtual); // Controler
 
 do
 {
+    Console.Clear();
     int choice = ReceiveOptions();
     SelectOption(choice);
 
@@ -21,6 +22,17 @@ do
 
 int ReceiveOptions()
 {
+    Console.WriteLine("\n-------DESENVOLVEDORES-------\n");
+
+    DesenvolvedorController.LerEImprimirDesenvolvedores();
+
+    Console.WriteLine("\n-------TAREFAS-------\n");
+
+
+    EstatisticasController.MostrarTodasAsTarefas();
+
+    Console.WriteLine("\n-------AÇÕES-------");
+
     Console.WriteLine($@"
 1 - Adicionar Desenvolvedor
 2 - Colocar deadline em tarefa
@@ -41,5 +53,10 @@ void SelectOption(int select)
         case 3:
             techLeaderController.CriarTarefa();
             break;
+        case 4:
+            techLeaderController.CriarTarefa();
+            break;
+        default:
+            return;
     }
 }
