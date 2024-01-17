@@ -14,6 +14,7 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
         public readonly string path = Usuario.path;
         public TechLeader(string nome, List<Tarefa>? tarefas) : base(nome, tarefas)
         {
+            AtualizarJsonDTO();
         }
 
         public void AdicionarDev(UsuarioDTO usuarioDTO)
@@ -76,22 +77,23 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
                 return null;
             }
         }
-        private DateTime MudarDeadLine(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
 
         // Totalmente funcional
         public Tarefa PesquisarTarefaId(int y) => EstatisticasTarefas.TarefasStaticEstatisticas
         .FirstOrDefault(x => x.TarefaId == y);
+        private DateTime MudarDeadLine(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
 
         public void CriarTarefa(string tarefaName, TarefaArea tarefaArea, TarefaEstado tarefaEstado, DateTime deadLine, Usuario usuarioAtribuido)
         {
             Tarefa novaTarefa = Tarefa.CriarTarefa(tarefaName, tarefaArea, tarefaEstado);
-            ColocarDeadline(novaTarefa, deadLine);
-            usuarioAtribuido.tarefasAtribuidas.Add(novaTarefa);
 
-            AtualizarJsonDTO();
+            novaTarefa.tarefaDataDeadline = deadLine;
+
+            usuarioAtribuido.tarefasAtribuidas.Add(novaTarefa);
 
             Console.WriteLine($"Tarefa '{novaTarefa.TarefaName}' criada e atribuída a {Nome}.");
         }
+
 
 
         private void MudarEstadoDeTarefa(Tarefa tarefa, TarefaEstado tarefaEstado)
