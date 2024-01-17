@@ -24,7 +24,7 @@ int ReceiveOptions()
     Console.WriteLine($@"
 1 - Adicionar Desenvolvedor
 2 - Colocar deadline em tarefa
-");
+3 - Criar Tarefa");
     return GeneralUtils.ReadOption(1, 10);
 }
 
@@ -32,8 +32,14 @@ void SelectOption(int select)
 {
     switch (select)
     {
-        default:
+        case 1:
             techLeaderController.AdicionarDev();
+            break;
+        case 2:
+            techLeaderController.ColocarDeadline();
+            break;
+        case 3:
+            techLeaderController.CriarTarefa();
             break;
     }
 }
