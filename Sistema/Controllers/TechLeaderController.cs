@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema.Options
+namespace Sistema.Controllers
 {
     public class TechLeaderController
     {
@@ -22,8 +22,11 @@ namespace Sistema.Options
         // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         // INTERATIVAS
 
+
+
         public void AdicionarDev()
         {
+            Console.Clear();
             string nome;
             do
             {
@@ -40,37 +43,48 @@ namespace Sistema.Options
             AdicionarDev(newDev.ConvertJsonDTOToObject());
         }
 
-
         public void ColocarDeadline()
         {
+            Console.Clear ();
             int tarefaID;
 
-            do
+            Console.WriteLine("Insira o ID da tarefa selecionada");
+
+            while (!int.TryParse(Console.ReadLine(), out tarefaID))
             {
-                Console.WriteLine("Insira o ID da tarefa selecionada");
+                Console.Clear();
+                Console.WriteLine("Por favor, insira um ID válido ");
+                Console.ReadKey();
+                Console.Clear();
+            }
 
-                if (!int.TryParse(Console.ReadLine(), out tarefaID))
-                {
-                    Console.WriteLine("Por favor, insira um ID válido ");
-                }
-            } while (!int.TryParse(Console.ReadLine(), out tarefaID));
+            if (PesquisarTarefaId(tarefaID) == null)
+            {
+                Console.WriteLine("Tarefa não encontrada, por favor tentar novamente");
+                Console.ReadKey();
+                return;
+            }
 
+            Console.Clear();
             Console.WriteLine("Tarefa encontrada e selecionada");
             Console.ReadKey();
+            Console.Clear();
 
             DateTime newDeadline;
 
-            do
+            Console.WriteLine("Insira uma DeadLine para a tarefa selecionada (dd/MM/yy):");
+
+
+            while (!DateTime.TryParse(Console.ReadLine(), out newDeadline))
             {
-                Console.WriteLine("Insira uma DeadLine para a tarefa selecionada");
+                Console.Clear();
+                Console.WriteLine("Por favor, insira uma DeadLine válida");
+                Console.ReadKey();
+                Console.Clear();
+            }
 
-                if (!DateTime.TryParse(Console.ReadLine(), out newDeadline))
-                {
-                    Console.WriteLine("Por favor, insira uma DeadLine válida");
-                }
-            } while (!DateTime.TryParse(Console.ReadLine(), out newDeadline));
-
-            Console.WriteLine("Data selecionada");
+            Console.Clear();
+            Console.WriteLine($"Tarefa: {PesquisarTarefaId(tarefaID).TarefaName}, Nova Data: {newDeadline}, Antiga Data:{PesquisarTarefaId(tarefaID).tarefaDataDeadline}");
             Console.ReadKey();
 
             var tarefa = PesquisarTarefaId(tarefaID);
@@ -78,10 +92,10 @@ namespace Sistema.Options
             ColocarDeadline(tarefa, newDeadline);
         }
 
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
         public void CriarTarefa()
         {
+            Console.Clear();
             // Instanciando objetos na memoria
             TarefaArea tarefaArea;
             TarefaEstado tarefaEstado;
@@ -89,12 +103,21 @@ namespace Sistema.Options
             int idUsuario;
 
 
+            if (!DesenvolvedorController.TemDesenvolvedor())
+            {
+                Console.Clear();
+                Console.WriteLine("Nenhum desenvolvedor encontrado, por favor registre um antes de criar uma tarefa");
+                Console.ReadKey();
+                return;
+            }
+
             Console.WriteLine("Insira o nome da tarefa:");
             string tarefaName = Console.ReadLine();
 
             // Area da tarefa
 
-            Console.WriteLine($@"Escolha a área da tarefa:
+            Console.WriteLine(
+$@"Escolha a área da tarefa:
 Frontend = 0,
 Backend = 1,
 Devops = 2,");
@@ -107,12 +130,13 @@ Devops = 2,");
 
             // Estado da tarefa
 
-            Console.WriteLine($@"Escolha a área da tarefa:
+            Console.WriteLine(
+$@"Escolha a área da tarefa:
 NãoIniciada = 0,
-Desenvolvimento = 0,
-Concluida = 1,
-Abandonada = 2,
-Analise = 3,");
+Desenvolvimento = 1,
+Concluida = 2,
+Abandonada = 3,
+Analise = 4,");
 
             do
             {
@@ -147,6 +171,7 @@ Analise = 3,");
 
             CriarTarefa(tarefaName, tarefaArea, tarefaEstado, deadLine, usuarioAtribuido);
         }
+
 
         // INTERATIVAS
         // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
