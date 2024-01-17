@@ -66,8 +66,8 @@ namespace Sistema.Controllers
 
             foreach (var devDTO in desenvolvedorDTOs)
             {
-                Console.WriteLine($"ID: {devDTO.AutomaticId} | Nome: {devDTO.Nome}");
-                // Add more information if needed
+                var role = devDTO.AutomaticId == 0 ? "TechLead" : "Desenovlvedor";
+                Console.WriteLine($"ID: {devDTO.AutomaticId} | Nome: {devDTO.Nome} | Role: {role}");
             }
         }
 
