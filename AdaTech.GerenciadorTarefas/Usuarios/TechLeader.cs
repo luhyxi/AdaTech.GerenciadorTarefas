@@ -51,7 +51,31 @@ namespace AdaTech.GerenciadorTarefas.Usuarios
             MudarDeadLine(tarefa, novaDeadline);
             AtualizarJsonDTO();
         }
+        public Usuario PesquisarDevPorId(int devId)
+        {
+            string existingJson = File.ReadAllText(path);
 
+            var usuarioList = JsonConvert.DeserializeObject<List<UsuarioDTO>>(existingJson) ?? new List<UsuarioDTO>();
+
+            var devDTO = usuarioList.FirstOrDefault(x => x.AutomaticId == devId);
+
+            if (devDTO != null)
+            {
+                Desenvolvedor dev = new Desenvolvedor(devDTO.Nome, devDTO.TarefasAtribuidas)
+                {
+                    Id = (int)devDTO.AutomaticId,
+                    jsonDTO = JsonConvert.SerializeObject(devDTO, Formatting.Indented)
+                };
+
+                Console.WriteLine($"Desenvolvedor encontrado: {dev.Nome}");
+                return dev;
+            }
+            else
+            {
+                Console.WriteLine($"Desenvolvedor com ID {devId} não encontrado.");
+                return null;
+            }
+        }
         private DateTime MudarDeadLine(Tarefa tarefa, DateTime novaDeadline) => (DateTime)(tarefa.tarefaDataDeadline = novaDeadline);
 
         // Totalmente funcional
