@@ -1,5 +1,7 @@
 ﻿using AdaTech.GerenciadorTarefas.Tarefas.Enums;
 using System.Collections;
+using ConsoleTables;
+
 
 namespace AdaTech.GerenciadorTarefas.Tarefas
 {
@@ -35,14 +37,35 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
         {
             TarefasStaticEstatisticas.Add(tarefa);
         }
+
         public static void MostrarTarefasTodas()
         {
             Console.WriteLine($"Todas as tarefas:\n");
+
+            if (TarefasStaticEstatisticas.Count == 0)
+            {
+                Console.WriteLine("Nenhuma tarefa encontrada.");
+                return;
+            }
+
+            var table = new ConsoleTable("ID", "Nome", "Área", "Estado", "Tem Deadline", "Data Deadline");
+
             foreach (var tarefa in TarefasStaticEstatisticas)
             {
-                tarefa.PrintTarefa();
+                table.AddRow(
+                    tarefa.TarefaId,
+                    tarefa.TarefaName,
+                    tarefa.TarefaArea,
+                    tarefa.TarefaEstado,
+                    tarefa.TemDeadline,
+                    tarefa.TemDeadline ? tarefa.tarefaDataDeadline.ToString() : "N/A"
+                );
             }
+
+            table.Write(Format.Alternative);
         }
+
+
         public void MostrarTarefasArea()
         {
             Console.WriteLine($"Tarefas da Area de {AreaDaEstatistica}:\n");
