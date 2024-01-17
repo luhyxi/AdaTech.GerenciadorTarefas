@@ -48,7 +48,7 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
                 return;
             }
 
-            var table = new ConsoleTable("ID", "Nome", "Área", "Estado", "Tem Deadline", "Data Deadline");
+            var table = new ConsoleTable("ID", "Nome", "Área", "Estado", "Data Deadline");
 
             foreach (var tarefa in TarefasStaticEstatisticas)
             {
@@ -57,8 +57,7 @@ namespace AdaTech.GerenciadorTarefas.Tarefas
                     tarefa.TarefaName,
                     tarefa.TarefaArea,
                     tarefa.TarefaEstado,
-                    tarefa.TemDeadline,
-                    tarefa.TemDeadline ? tarefa.tarefaDataDeadline.ToString() : "N/A"
+                    tarefa.tarefaDataDeadline.ToString()
                 );
             }
 
